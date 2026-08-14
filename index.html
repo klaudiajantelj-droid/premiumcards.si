@@ -44,6 +44,8 @@
 
 * { box-sizing: border-box; }
 
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -267,6 +269,7 @@ html[data-lang="es"] .t-es { display: inline; }
   gap: 56px;
   align-items: center;
 }
+.hero-copy, .hero-visual { min-width: 0; }
 
 .eyebrow {
   font-family: var(--font-mono);
@@ -322,165 +325,46 @@ html[data-lang="es"] .t-es { display: inline; }
 .hero-price-row-sub .hero-price-value { font-size: 1.1rem; color: var(--on-void-soft); }
 .hero-price-note { font-size: 0.78rem; color: var(--on-void-soft); opacity: 0.85; margin: 10px 0 0; padding-top: 10px; border-top: 1px dashed rgba(203,163,92,0.25); }
 
-.card-fan { position: relative; width: 380px; height: 260px; perspective: 1400px; }
-.card-fan-item { position: absolute; top: 0; left: 10px; transition: transform .25s ease; transform-style: preserve-3d; }
-.card-fan-1 { transform: translateX(-38px) translateY(4px) rotate(-11deg) rotateX(3deg); z-index: 1; }
-.card-fan-2 { transform: translateX(-8px) translateY(-2px) rotate(-2deg) rotateX(3deg); z-index: 2; }
-.card-fan-3 { transform: translateX(24px) translateY(-8px) rotate(7deg) rotateX(4deg); z-index: 3; }
-.card-fan-1 .card-front { transform: rotate(0deg); }
-.card-fan-2 .card-front { transform: rotate(0deg); }
-.card-fan-3 .card-front { transform: rotate(0deg); }
-.card-fan-item .card-brand { font-size: 0.86rem; }
-.card-fan-item .card-sub { font-size: 0.72rem; }
-
-.card-stack { position: relative; width: 360px; height: 240px; }
-
-.biz-card {
-  position: absolute;
-  width: 340px;
-  height: 214px;
-  border-radius: var(--radius-card);
-  top: 12px;
-  left: 10px;
+/* ---------- hero product photo ---------- */
+.hero-product-shot {
+  position: relative;
+  width: min(610px, 52vw);
+  margin: 0;
+  isolation: isolate;
 }
-
-.card-back {
-  background: var(--line);
-  transform: rotate(-9deg);
-  box-shadow:
-    0 2px 4px rgba(30,27,23,0.10),
-    0 20px 40px rgba(30,27,23,0.16),
-    0 44px 70px -20px rgba(20,17,13,0.22);
-}
-
-.card-front {
-  background:
-    /* subtle paper-fiber grain — the "350g matte cardstock" cue */
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.05'/></svg>"),
-    linear-gradient(155deg, #4a3a22 0%, #2b2013 55%, #17110a 100%);
-  transform: rotate(4deg);
-  box-shadow:
-    0 2px 3px rgba(15,13,10,0.35),
-    0 22px 34px -6px rgba(15,13,10,0.38),
-    0 48px 64px -24px rgba(10,9,7,0.4);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 34px;
-}
-
-/* a sliver of visible material thickness along the lower edge of the
-   front card — matte cardstock has real body, not the zero-thickness
-   look of a flat rectangle */
-.card-stack .card-front::after {
+.hero-product-shot::before {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: -3px;
-  height: 5px;
-  border-radius: 0 0 var(--radius-card) var(--radius-card);
-  background: linear-gradient(180deg, #241a0f 0%, #140f09 100%);
-  box-shadow: 0 3px 5px rgba(10,8,6,0.35);
+  inset: 10% 5% 5%;
   z-index: -1;
+  background: radial-gradient(circle, rgba(228,196,134,0.18), transparent 68%);
+  filter: blur(20px);
 }
-
-.card-vignette {
+.hero-product-shot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter:
+    drop-shadow(0 2px 3px rgba(0,0,0,0.35))
+    drop-shadow(0 18px 28px rgba(0,0,0,0.32))
+    drop-shadow(0 44px 60px rgba(0,0,0,0.24));
+}
+.hero-product-shot::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 90% at 30% 20%, transparent 40%, rgba(0,0,0,0.35) 100%);
-  pointer-events: none;
+  left: 8%;
+  right: 8%;
+  bottom: -4%;
+  height: 14%;
+  z-index: -1;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.42) 0%, transparent 72%);
+  filter: blur(6px);
 }
 
-/* card-uv is now the ambient ink/registration texture — very faint,
-   desaturated, print-proof in character. It is NOT the glossy coating;
-   the glossy coating lives in .card-brand-uv below, confined to the
-   wordmark and rule line only, exactly where a real print job would
-   apply partial UV varnish. */
-.card-uv {
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='32'><g fill='none' stroke='white' stroke-width='0.7' opacity='0.35'><rect x='2' y='2' width='20' height='13' rx='3.5'/><rect x='26' y='2' width='20' height='13' rx='3.5'/><rect x='14' y='17' width='20' height='13' rx='3.5'/><rect x='38' y='17' width='20' height='13' rx='3.5'/><rect x='-10' y='17' width='20' height='13' rx='3.5'/></g></svg>");
-  background-repeat: repeat;
-  background-size: 48px 32px;
-  mix-blend-mode: overlay;
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-/* ---------- partial UV varnish, confined to the wordmark + rule line ----------
-   Directional gloss only where "light" crosses the coated shape — a
-   background-clip:text sheen for the name, and a matching sheen strip
-   for the short rule beneath it. Everywhere else on the card stays
-   flat matte, which is the whole point of a PARTIAL coating. */
-.card-brand-uv {
-  position: relative;
-  display: inline-block;
-}
-.card-brand-uv .card-brand {
-  position: relative;
-  background: linear-gradient(115deg,
-    var(--card-white) 30%,
-    #fffef8 46%,
-    #fffef8 50%,
-    var(--card-white) 66%);
-  background-size: 260% 100%;
-  background-position: 120% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: var(--card-white); /* fallback if background-clip:text is unsupported */
-  animation: uv-catch-text 7s ease-in-out infinite;
-  animation-delay: var(--uv-delay, 0s);
-}
-.card-brand-uv .card-line {
-  position: relative;
-  background: linear-gradient(90deg, var(--brass-light), var(--gold-bright), var(--brass-light));
-  background-size: 300% 100%;
-  background-position: 120% 0;
-  animation: uv-catch-line 7s ease-in-out infinite;
-  animation-delay: var(--uv-delay, 0s);
-}
+/* shared with .uv-swatch-mark in the quality section's UV highlight block */
 @keyframes uv-catch-text {
   0%, 20%, 100% { background-position: 120% 0; }
   55% { background-position: -20% 0; }
-}
-@keyframes uv-catch-line {
-  0%, 20%, 100% { background-position: 120% 0; }
-  55% { background-position: -20% 0; }
-}
-
-.card-corner {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  border-color: rgba(251,249,244,0.5);
-  border-style: solid;
-  border-width: 0;
-}
-.card-corner.tl { top: 10px; left: 10px; border-top-width: 1px; border-left-width: 1px; }
-.card-corner.tr { top: 10px; right: 10px; border-top-width: 1px; border-right-width: 1px; }
-.card-corner.bl { bottom: 10px; left: 10px; border-bottom-width: 1px; border-left-width: 1px; }
-.card-corner.br { bottom: 10px; right: 10px; border-bottom-width: 1px; border-right-width: 1px; }
-
-.card-brand {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.15rem;
-  color: var(--card-white);
-  letter-spacing: 0.02em;
-}
-.card-line {
-  display: block;
-  width: 36px;
-  height: 2px;
-  background: var(--brass-light);
-  margin: 12px 0 10px;
-}
-.card-sub {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: rgba(251,249,244,0.65);
-  letter-spacing: 0.05em;
 }
 
 .spec-tag {
@@ -619,10 +503,111 @@ section h2 {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 28px 24px;
 }
+.feature-grid > * { min-width: 0; }
 .feature { border-top: 1px solid var(--line); padding-top: 20px; }
 .feature-icon { width: 32px; height: 32px; color: var(--brass); margin-bottom: 16px; }
 .feature h3 { font-size: 0.98rem; margin-bottom: 0; }
 .feature p { font-size: 0.88rem; color: var(--ink-soft); margin: 0; }
+
+/* ---------- UV-lacquer highlight (within the product/quality section) ---------- */
+.uv-highlight {
+  margin-top: 56px;
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.uv-highlight > * { min-width: 0; }
+.uv-highlight-h {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+.uv-highlight-copy p {
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+  max-width: 52ch;
+  margin: 0 0 22px;
+}
+.uv-perks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 20px;
+}
+.uv-perks > li { min-width: 0; }
+.uv-perks li {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  padding-left: 18px;
+  position: relative;
+}
+.uv-perks li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brass);
+}
+
+/* small swatch: dark matte panel with a gloss-catching mark, reusing the
+   same background-clip:text sheen technique used on the hero cards, to
+   show the matte/glossy contrast without needing a product photo */
+.uv-swatch {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  min-height: 180px;
+  border-radius: 14px;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.05'/></svg>"),
+    linear-gradient(155deg, #4a3a22 0%, #2b2013 55%, #17110a 100%);
+  box-shadow: 0 18px 34px -10px rgba(15,13,10,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.uv-swatch-mark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  background: linear-gradient(115deg, var(--card-white) 30%, #fffef8 46%, #fffef8 50%, var(--card-white) 66%);
+  background-size: 260% 100%;
+  background-position: 120% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--card-white);
+  animation: uv-catch-text 6s ease-in-out infinite;
+}
+.uv-swatch-caption {
+  position: absolute;
+  bottom: 12px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: rgba(251,249,244,0.5);
+}
+@media (max-width: 900px) {
+  .uv-highlight { grid-template-columns: 1fr; }
+  .uv-highlight-visual { order: -1; max-width: 340px; margin: 0 auto; }
+}
+@media (max-width: 560px) {
+  .uv-perks { grid-template-columns: 1fr; }
+}
 
 /* ---------- process ---------- */
 .process { background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -635,6 +620,7 @@ section h2 {
   gap: 40px;
   position: relative;
 }
+.steps > li { min-width: 0; }
 .steps li { position: relative; padding-left: 4px; }
 .step-num {
   display: block;
@@ -696,6 +682,7 @@ section h2 {
   gap: 64px;
   align-items: start;
 }
+.final-cta-inner > * { min-width: 0; }
 
 .order-form {
   background: var(--paper-2);
@@ -706,6 +693,8 @@ section h2 {
   gap: 18px;
   color: var(--ink);
 }
+.order-form > * { min-width: 0; }
+.person-fields > * { min-width: 0; }
 .order-form label {
   display: flex;
   flex-direction: column;
@@ -807,6 +796,24 @@ section h2 {
   color: var(--brass);
   margin: 0 0 2px;
 }
+.form-group-h {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin: 0 0 4px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+.form-group-h:first-child { padding-top: 0; border-top: none; }
+.form-group-h .form-group-step {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--brass);
+  display: block;
+  margin-bottom: 6px;
+}
 .config-item {
   display: flex;
   align-items: flex-start;
@@ -821,6 +828,13 @@ section h2 {
 .config-item input { margin-top: 3px; accent-color: var(--brass); width: 16px; height: 16px; flex-shrink: 0; cursor: pointer; }
 .config-item input:disabled { opacity: 0.6; cursor: default; }
 .config-item.is-checked { border-color: var(--brass); background: rgba(169,130,79,0.07); }
+.section-dark .radio-pill.is-active,
+.section-dark .config-item.is-checked,
+.final-cta .radio-pill.is-active,
+.final-cta .config-item.is-checked {
+  background: #F1E7D3;
+  border-color: var(--gold);
+}
 .config-item-body { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0; }
 .config-item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .config-item-name { font-family: var(--font-body); font-weight: 600; font-size: 0.93rem; color: var(--ink); }
@@ -983,7 +997,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .card-sheen { animation: none; }
+  .uv-swatch-mark { animation: none; }
   .btn, .acc-panel, .acc-icon { transition: none; }
 }
 
@@ -991,6 +1005,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (max-width: 980px) {
   .hero-inner { grid-template-columns: 1fr; }
   .hero-visual { order: -1; margin-bottom: 12px; }
+  .hero-product-shot { width: min(680px, 92vw); }
   .feature-grid { grid-template-columns: repeat(2, 1fr); }
   .steps { grid-template-columns: 1fr; gap: 32px; }
   .final-cta-inner { grid-template-columns: 1fr; }
@@ -1003,8 +1018,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .hero { padding: 64px 0 56px; }
   section { padding: 64px 0; }
   .feature-grid { grid-template-columns: 1fr; }
-  .card-stack { width: 300px; height: 200px; transform: scale(0.9); }
-  .card-fan { width: 300px; height: 200px; transform: scale(0.82); transform-origin: top center; }
+  .hero-product-shot { width: min(520px, 108vw); }
+  .spec-tag { right: 50%; transform: translateX(50%); bottom: -2px; white-space: nowrap; }
+  .spec-label { font-size: 0.6rem; }
 }
 
 </style>
@@ -1038,7 +1054,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </ul>
       </div>
       <a href="#konfigurator" class="btn btn-primary btn-sm">
-        <span class="t-si">Od 111 €</span><span class="t-en">From €111</span><span class="t-de">Ab 111 €</span><span class="t-es">Desde 111 €</span>
+        <span class="t-si">Povpraševanje</span><span class="t-en">Order request</span><span class="t-de">Anfrage</span><span class="t-es">Solicitud</span>
       </a>
     </div>
   </div>
@@ -1100,7 +1116,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
         <div class="hero-ctas">
           <a href="#konfigurator" class="btn btn-primary">
-            <span class="t-si">Izberi paket od 111 €</span><span class="t-en">Choose a package from €111</span>
+            <span class="t-si">Izberite paket od 111 €</span><span class="t-en">Choose a package from €111</span>
             <span class="t-de">Paket wählen ab 111 €</span><span class="t-es">Elegir paquete desde 111 €</span>
           </a>
           <a href="#kakovost" class="btn btn-ghost">
@@ -1111,55 +1127,26 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       </div>
 
       <div class="hero-visual" aria-hidden="true">
-        <div class="card-fan">
-          <div class="card-stack card-fan-item card-fan-1">
-            <div class="biz-card card-back"></div>
-            <div class="biz-card card-front">
-              <div class="card-uv"></div>
-              <div class="card-vignette"></div>
-              <div class="card-corner tl"></div><div class="card-corner tr"></div>
-              <div class="card-corner bl"></div><div class="card-corner br"></div>
-              <span class="card-brand-uv" style="--uv-delay: 0s;">
-                <span class="card-brand"><span class="t-si">MIZARSTVO NOVAK</span><span class="t-en">NOVAK WOODWORKS</span><span class="t-de">TISCHLEREI NOVAK</span><span class="t-es">CARPINTERÍA NOVAK</span></span>
-                <span class="card-line"></span>
-              </span>
-              <span class="card-sub"><span class="t-si">Samostojni podjetnik</span><span class="t-en">Independent craftsman</span><span class="t-de">Selbstständiger Handwerker</span><span class="t-es">Artesano autónomo</span></span>
-            </div>
-          </div>
-          <div class="card-stack card-fan-item card-fan-2">
-            <div class="biz-card card-back"></div>
-            <div class="biz-card card-front">
-              <div class="card-uv"></div>
-              <div class="card-vignette"></div>
-              <div class="card-corner tl"></div><div class="card-corner tr"></div>
-              <div class="card-corner bl"></div><div class="card-corner br"></div>
-              <span class="card-brand-uv" style="--uv-delay: 2.2s;">
-                <span class="card-brand"><span class="t-si">ANA KOVAČ</span><span class="t-en">ANA KOVAČ</span><span class="t-de">ANA KOVAČ</span><span class="t-es">ANA KOVAČ</span></span>
-                <span class="card-line"></span>
-              </span>
-              <span class="card-sub"><span class="t-si">Poslovna svetovalka</span><span class="t-en">Business consultant</span><span class="t-de">Unternehmensberaterin</span><span class="t-es">Consultora empresarial</span></span>
-            </div>
-          </div>
-          <div class="card-stack card-fan-item card-fan-3">
-            <div class="biz-card card-back"></div>
-            <div class="biz-card card-front">
-              <div class="card-uv"></div>
-              <div class="card-vignette"></div>
-              <div class="card-corner tl"></div><div class="card-corner tr"></div>
-              <div class="card-corner bl"></div><div class="card-corner br"></div>
-              <span class="card-brand-uv" style="--uv-delay: 4.4s;">
-                <span class="card-brand"><span class="t-si">VAŠE PODJETJE</span><span class="t-en">YOUR COMPANY</span><span class="t-de">IHR UNTERNEHMEN</span><span class="t-es">SU EMPRESA</span></span>
-                <span class="card-line"></span>
-              </span>
-              <span class="card-sub"><span class="t-si">Vodja prodaje</span><span class="t-en">Head of Sales</span><span class="t-de">Vertriebsleiter/in</span><span class="t-es">Director/a de ventas</span></span>
-            </div>
-          </div>
-        </div>
+        <figure class="hero-product-shot">
+          <img
+            src="assets/hero-cards-croco-uv-v3.png"
+            alt=""
+            width="1536"
+            height="1024"
+            decoding="async"
+            fetchpriority="high"
+          >
+        </figure>
         <div class="spec-tag">
           <span class="dot dot-forest"></span>
           <span class="dot dot-brass"></span>
           <span class="dot dot-ink"></span>
-          <span class="spec-label">85×55 — R:3mm</span>
+          <span class="spec-label">
+            <span class="t-si">350 G · SOFTTOUCH · PARCIALNI UV LAK</span>
+            <span class="t-en">350 GSM · SOFT-TOUCH · SPOT UV</span>
+            <span class="t-de">350 G · SOFTTOUCH · PARTIELLER UV-LACK</span>
+            <span class="t-es">350 G · SOFT-TOUCH · BARNIZ UV PARCIAL</span>
+          </span>
         </div>
 
       </div>
@@ -1182,7 +1169,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <span class="t-es">Su presencia en línea ayuda a que le encuentren. Una tarjeta premium hace que le recuerden después de conocerle en persona.</span>
       </p>
       <a href="#konfigurator" class="btn btn-primary">
-        <span class="t-si">Izberi paket od 111 €</span><span class="t-en">Choose a package from €111</span>
+        <span class="t-si">Izberite paket od 111 €</span><span class="t-en">Choose a package from €111</span>
         <span class="t-de">Paket wählen ab 111 €</span><span class="t-es">Elegir paquete desde 111 €</span>
       </a>
     </div>
@@ -1200,10 +1187,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <span class="t-es">Calidad que se siente</span>
       </h2>
       <p style="max-width: 68ch; color: var(--ink-soft); font-size: 1.02rem; margin: -24px 0 44px;">
-        <span class="t-si">Digitalni stik je hiter. Premium vizitka ostane. Natančen ofsetni tisk zagotavlja čiste linije, fine podrobnosti in bogate barve. Softtouch ustvari prijeten, žameten občutek. Parcialni UV lak poudari logotip, ime ali izbrane oblikovne elemente.</span>
-        <span class="t-en">Digital contact is fast. A premium business card remains. Precision offset printing delivers clean lines, fine details and rich colours. The soft-touch finish creates a smooth, tactile surface. Spot UV highlights your logo, name or selected design elements.</span>
-        <span class="t-de">Digitaler Kontakt ist schnell. Eine Premium-Visitenkarte bleibt. Präziser Offsetdruck sorgt für klare Linien, feine Details und satte Farben. Die Soft-Touch-Oberfläche fühlt sich angenehm samtig an. Partieller UV-Lack hebt Logo, Namen oder ausgewählte Gestaltungselemente hervor.</span>
-        <span class="t-es">El contacto digital es rápido. Una tarjeta premium permanece. La impresión offset de precisión ofrece líneas limpias, detalles finos y colores intensos. El acabado soft-touch crea una superficie suave y aterciopelada. El barniz UV selectivo resalta su logotipo, nombre o elementos de diseño elegidos.</span>
+        <span class="t-si">Digitalni stik izgine, ko se zaslon zapre. Premium vizitka ostane v roki — in v pogovoru. Natančen ofsetni tisk zagotavlja čiste linije in bogate barve, softtouch pa ustvari prijeten občutek že ob prvem dotiku.</span>
+        <span class="t-en">Digital contact disappears the moment the screen goes dark. A premium card stays in the hand — and in the conversation. Precision offset printing delivers clean lines and rich colour, and the soft-touch finish feels good from the first touch.</span>
+        <span class="t-de">Digitaler Kontakt verschwindet, sobald der Bildschirm ausgeht. Eine Premium-Karte bleibt in der Hand — und im Gespräch. Präziser Offsetdruck sorgt für klare Linien und satte Farben, und die Softtouch-Oberfläche fühlt sich schon beim ersten Kontakt angenehm an.</span>
+        <span class="t-es">El contacto digital desaparece en cuanto se apaga la pantalla. Una tarjeta premium permanece en la mano — y en la conversación. La impresión offset de precisión ofrece líneas limpias y colores intensos, y el acabado soft-touch se siente bien desde el primer contacto.</span>
       </p>
 
       <div class="feature-grid">
@@ -1257,13 +1244,162 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           </h3>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ PARTIAL UV LACQUER (its own section, per brand direction) ============ -->
+  <section id="uv-lak" class="uv-section reg-corners">
+    <div class="wrap">
+      <p class="section-eyebrow">
+        <span class="t-si">Partielni UV lak</span><span class="t-en">Spot UV</span>
+        <span class="t-de">Partieller UV-Lack</span><span class="t-es">Barniz UV parcial</span>
+      </p>
+      <div class="uv-highlight">
+        <div class="uv-highlight-copy">
+          <p class="uv-highlight-h">
+            <span class="t-si">VIDNO. OTIPLJIVO. ZAPOMNLJIVO.</span>
+            <span class="t-en">VISIBLE. TACTILE. MEMORABLE.</span>
+            <span class="t-de">SICHTBAR. SPÜRBAR. EINPRÄGSAM.</span>
+            <span class="t-es">VISIBLE. TÁCTIL. MEMORABLE.</span>
+          </p>
+          <p>
+            <span class="t-si">Parcialni UV lak ustvari jasen kontrast med žametno matirano površino in izbranimi sijočimi detajli — nanesemo ga samo tam, kjer želite poudarek: na logotip, ime ali grafično linijo. Ob nagibu proti svetlobi ti deli zažarijo, ob dotiku pa začutite razliko med matirano in lakirano površino. Vizitka tako ne pritegne le pogleda, ampak ostane tudi v spominu.</span>
+            <span class="t-en">Spot UV creates a clear contrast between the velvety matte surface and selected glossy details — applied only where you want the emphasis: your logo, name, or a graphic line. Tilt the card toward the light and those areas catch a shine; run a finger across it and you feel the difference between matte and coated. The result is a card that doesn't just get noticed — it gets remembered.</span>
+            <span class="t-de">Partieller UV-Lack schafft einen klaren Kontrast zwischen der samtig matten Oberfläche und gezielt glänzenden Details — aufgetragen nur dort, wo Sie den Akzent wollen: auf Logo, Namen oder eine grafische Linie. Kippt man die Karte ins Licht, beginnen diese Stellen zu glänzen; beim Darüberstreichen spürt man den Unterschied zwischen matt und lackiert. So fällt die Karte nicht nur auf — sie bleibt im Gedächtnis.</span>
+            <span class="t-es">El barniz UV parcial crea un contraste claro entre la superficie mate y aterciopelada y determinados detalles brillantes — aplicado solo donde quiere el acento: en el logotipo, el nombre o una línea gráfica. Al inclinar la tarjeta hacia la luz, esas zonas cobran brillo; al pasar el dedo se percibe la diferencia entre lo mate y lo lacado. El resultado es una tarjeta que no solo llama la atención — se recuerda.</span>
+          </p>
+          <ul class="uv-perks">
+            <li>
+              <span class="t-si">Sijoči poudarki natanko tam, kjer jih želite</span>
+              <span class="t-en">Glossy highlights exactly where you want them</span>
+              <span class="t-de">Glänzende Akzente genau dort, wo Sie sie wollen</span>
+              <span class="t-es">Brillos precisos justo donde los quiere</span>
+            </li>
+            <li>
+              <span class="t-si">Otipljiv kontrast z mat softtouch površino</span>
+              <span class="t-en">Tactile contrast against the matte soft-touch surface</span>
+              <span class="t-de">Spürbarer Kontrast zur matten Softtouch-Oberfläche</span>
+              <span class="t-es">Contraste táctil frente a la superficie mate soft-touch</span>
+            </li>
+            <li>
+              <span class="t-si">Poudari logotip, ime ali grafično linijo</span>
+              <span class="t-en">Highlights your logo, name, or a graphic line</span>
+              <span class="t-de">Hebt Logo, Namen oder eine grafische Linie hervor</span>
+              <span class="t-es">Destaca el logotipo, el nombre o una línea gráfica</span>
+            </li>
+            <li>
+              <span class="t-si">Zažari, ko kartico nagnete proti svetlobi</span>
+              <span class="t-en">Catches the light the moment you tilt the card</span>
+              <span class="t-de">Fängt das Licht ein, sobald Sie die Karte kippen</span>
+              <span class="t-es">Capta la luz al inclinar la tarjeta</span>
+            </li>
+          </ul>
+        </div>
+        <div class="uv-highlight-visual">
+          <div class="uv-swatch" aria-hidden="true">
+            <span class="uv-swatch-mark">UV</span>
+            <span class="uv-swatch-caption">
+              <span class="t-si">PARCIALNI UV LAK</span>
+              <span class="t-en">SPOT UV</span>
+              <span class="t-de">PARTIELLER UV-LACK</span>
+              <span class="t-es">BARNIZ UV PARCIAL</span>
+            </span>
+          </div>
+        </div>
+      </div>
 
       <a href="#konfigurator" class="btn btn-primary" style="margin-top: 36px;">
-        <span class="t-si">Izberi paket od 111 €</span><span class="t-en">Choose a package from €111</span>
+        <span class="t-si">Izberite paket od 111 €</span><span class="t-en">Choose a package from €111</span>
         <span class="t-de">Paket wählen ab 111 €</span><span class="t-es">Elegir paquete desde 111 €</span>
       </a>
     </div>
   </section>
+  <!-- ============ COMPACT COMPARISON (merged story + offline effect) ============ -->
+  <section class="manifesto reg-corners section-dark">
+    <div class="wrap manifesto-inner">
+      <div class="manifesto-head">
+        <p class="section-eyebrow">
+          <span class="t-si">Primerjava</span><span class="t-en">Comparison</span>
+          <span class="t-de">Vergleich</span><span class="t-es">Comparación</span>
+        </p>
+        <h2 class="manifesto-h">
+          <span class="t-si">DIGITALNO POSKRBI, DA VAS NAJDEJO.<br><em>PREMIUM VIZITKA POSKRBI, DA SI VAS ZAPOMNIJO.</em></span>
+          <span class="t-en">DIGITAL GETS YOU FOUND.<br><em>A PREMIUM CARD GETS YOU REMEMBERED.</em></span>
+          <span class="t-de">DIGITAL MACHT SIE AUFFINDBAR.<br><em>EINE PREMIUM-KARTE MACHT SIE UNVERGESSLICH.</em></span>
+          <span class="t-es">LO DIGITAL HACE QUE LE ENCUENTREN.<br><em>LA TARJETA PREMIUM HACE QUE LE RECUERDEN.</em></span>
+        </h2>
+        <p class="manifesto-sub">
+          <span class="t-si">Spletna stran in družbena omrežja ustvarijo prvi stik. Premium vizitka podaljša osebno srečanje. Ostane na mizi, v denarnici ali pri sodelavcu in vaše ime ohrani prisotno tudi po koncu pogovora.</span>
+          <span class="t-en">Your website and social channels create the first contact. A premium business card extends the personal meeting. It stays on the desk, in the wallet, or with a colleague — keeping your name present long after the conversation ends.</span>
+          <span class="t-de">Ihre Website und Social-Media-Kanäle schaffen den ersten Kontakt. Eine Premium-Visitenkarte verlängert das persönliche Treffen. Sie bleibt auf dem Schreibtisch, im Portemonnaie oder bei einem Kollegen liegen — und hält Ihren Namen präsent, lange nachdem das Gespräch vorbei ist.</span>
+          <span class="t-es">Su web y sus redes sociales generan el primer contacto. Una tarjeta premium prolonga el encuentro personal. Permanece en el escritorio, en la cartera o con un compañero, manteniendo su nombre presente mucho después de que termine la conversación.</span>
+        </p>
+      </div>
+
+      <div class="compare">
+        <div class="compare-col compare-digital">
+          <span class="compare-label">
+            <span class="t-si">Digitalni stik</span><span class="t-en">Digital contact</span>
+            <span class="t-de">Digitaler Kontakt</span><span class="t-es">Contacto digital</span>
+          </span>
+          <ul>
+            <li>
+              <span class="t-si">Hiter dostop do informacij</span><span class="t-en">Fast access to information</span>
+              <span class="t-de">Schneller Zugriff auf Informationen</span><span class="t-es">Acceso rápido a la información</span>
+            </li>
+            <li>
+              <span class="t-si">Idealen za iskanje in prvi stik</span><span class="t-en">Ideal for searching and first contact</span>
+              <span class="t-de">Ideal für die Suche und den ersten Kontakt</span><span class="t-es">Ideal para búsquedas y el primer contacto</span>
+            </li>
+            <li>
+              <span class="t-si">Izgine, ko se zaslon zapre</span><span class="t-en">Disappears the moment the screen goes dark</span>
+              <span class="t-de">Verschwindet, sobald der Bildschirm ausgeht</span><span class="t-es">Desaparece en cuanto se apaga la pantalla</span>
+            </li>
+            <li>
+              <span class="t-si">Ne prenese občutka za material ali kakovost izdelave</span><span class="t-en">Can't convey material, texture, or craftsmanship</span>
+              <span class="t-de">Vermittelt weder Material, Haptik noch Verarbeitungsqualität</span><span class="t-es">No transmite el material, el tacto ni la calidad de fabricación</span>
+            </li>
+          </ul>
+        </div>
+        <div class="compare-col compare-offline">
+          <span class="compare-label">
+            <span class="t-si">Premium ofsetna vizitka</span><span class="t-en">Premium offset card</span>
+            <span class="t-de">Premium-Offsetkarte</span><span class="t-es">Tarjeta offset premium</span>
+          </span>
+          <ul>
+            <li>
+              <span class="t-si">Ostane po osebnem srečanju</span><span class="t-en">Stays behind after the meeting ends</span>
+              <span class="t-de">Bleibt nach dem persönlichen Treffen zurück</span><span class="t-es">Permanece después del encuentro personal</span>
+            </li>
+            <li>
+              <span class="t-si">Vašo znamko naredi fizično otipljivo</span><span class="t-en">Makes your brand physically tangible</span>
+              <span class="t-de">Macht Ihre Marke physisch greifbar</span><span class="t-es">Hace que su marca sea físicamente tangible</span>
+            </li>
+            <li>
+              <span class="t-si">Softtouch in parcialni UV lak ustvarita takojšen kakovosten vtis</span><span class="t-en">Soft-touch finish and spot UV create an instant impression of quality</span>
+              <span class="t-de">Softtouch-Oberfläche und partieller UV-Lack erzeugen sofort einen hochwertigen Eindruck</span><span class="t-es">El acabado soft-touch y el barniz UV parcial crean una impresión de calidad inmediata</span>
+            </li>
+            <li>
+              <span class="t-si">Lahko jo posredujejo odločevalcu ali sodelavcu</span><span class="t-en">Can be handed on to a decision-maker or colleague</span>
+              <span class="t-de">Kann an eine Entscheidungsperson oder Kollegen weitergereicht werden</span><span class="t-es">Puede entregarse a un responsable de decisiones o a un compañero</span>
+            </li>
+            <li>
+              <span class="t-si">Deluje brez telefona, povezave ali aplikacije</span><span class="t-en">Works without a phone, connection, or app</span>
+              <span class="t-de">Funktioniert ohne Telefon, Verbindung oder App</span><span class="t-es">Funciona sin teléfono, conexión ni aplicación</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="manifesto-close">
+        <span class="t-si">Digitalno vas naredi vidne. Premium vizitka vas naredi nepozabne.</span>
+        <span class="t-en">Be visible online. Be remembered in person.</span>
+        <span class="t-de">Online sichtbar. Persönlich unvergessen.</span>
+        <span class="t-es">Visible online. Inolvidable en persona.</span>
+      </p>
+    </div>
+  </section>
+
   <!-- ============ KONFIGURATOR (service options + people + live price) ============ -->
   <section id="konfigurator" class="final-cta reg-corners">
     <div class="wrap final-cta-inner">
@@ -1273,10 +1409,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <span class="t-de">Konfigurator</span><span class="t-es">Configurador</span>
         </p>
         <h2>
-          <span class="t-si">Izberi svoj paket</span>
+        <span class="t-si">Izberite svoj paket</span>
           <span class="t-en">Choose your package</span>
-          <span class="t-de">Wähle dein Paket</span>
-          <span class="t-es">Elige tu paquete</span>
+        <span class="t-de">Wählen Sie Ihr Paket</span>
+        <span class="t-es">Elija su paquete</span>
         </h2>
         <p>
           <span class="t-si">Izberite pripravljeno datoteko, oblikovanje, redesign ali nov logotip, dodajte število oseb — cena se izračuna sproti.</span>
@@ -1295,7 +1431,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <label class="radio-pill" data-order-type="first">
             <input type="radio" name="orderType" value="first" checked>
             <span>
-              <span class="t-si">Prva naročba</span><span class="t-en">First order</span>
+              <span class="t-si">Prvo naročilo</span><span class="t-en">First order</span>
               <span class="t-de">Erstbestellung</span><span class="t-es">Primer pedido</span>
             </span>
           </label>
@@ -1522,92 +1658,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     </div>
   </section>
 
-  <!-- ============ COMPACT COMPARISON (merged story + offline effect) ============ -->
-  <section class="manifesto reg-corners section-dark">
-    <div class="wrap manifesto-inner">
-      <div class="manifesto-head">
-        <p class="section-eyebrow">
-          <span class="t-si">Primerjava</span><span class="t-en">Comparison</span>
-          <span class="t-de">Vergleich</span><span class="t-es">Comparación</span>
-        </p>
-        <h2 class="manifesto-h">
-          <span class="t-si">DIGITALNO POSKRBI, DA VAS NAJDEJO.<br><em>PREMIUM VIZITKA POSKRBI, DA SI VAS ZAPOMNIJO.</em></span>
-          <span class="t-en">DIGITAL GETS YOU FOUND.<br><em>A PREMIUM CARD GETS YOU REMEMBERED.</em></span>
-          <span class="t-de">DIGITAL MACHT SIE AUFFINDBAR.<br><em>EINE PREMIUM-KARTE MACHT SIE UNVERGESSLICH.</em></span>
-          <span class="t-es">LO DIGITAL HACE QUE LE ENCUENTREN.<br><em>LA TARJETA PREMIUM HACE QUE LE RECUERDEN.</em></span>
-        </h2>
-        <p class="manifesto-sub">
-          <span class="t-si">Spletna stran in družbena omrežja ustvarijo prvi stik. Premium vizitka podaljša osebno srečanje. Ostane na mizi, v denarnici ali pri sodelavcu in vaše ime ohrani prisotno tudi po koncu pogovora.</span>
-          <span class="t-en">Your website and social channels create the first contact. A premium business card extends the personal meeting. It stays on the desk, in the wallet, or with a colleague — keeping your name present long after the conversation ends.</span>
-          <span class="t-de">Ihre Website und Social-Media-Kanäle schaffen den ersten Kontakt. Eine Premium-Visitenkarte verlängert das persönliche Treffen. Sie bleibt auf dem Schreibtisch, im Portemonnaie oder bei einem Kollegen liegen — und hält Ihren Namen präsent, lange nachdem das Gespräch vorbei ist.</span>
-          <span class="t-es">Su web y sus redes sociales generan el primer contacto. Una tarjeta premium prolonga el encuentro personal. Permanece en el escritorio, en la cartera o con un compañero, manteniendo su nombre presente mucho después de que termine la conversación.</span>
-        </p>
-      </div>
-
-      <div class="compare">
-        <div class="compare-col compare-digital">
-          <span class="compare-label">
-            <span class="t-si">Digitalni stik</span><span class="t-en">Digital contact</span>
-            <span class="t-de">Digitaler Kontakt</span><span class="t-es">Contacto digital</span>
-          </span>
-          <ul>
-            <li>
-              <span class="t-si">Hiter dostop do informacij</span><span class="t-en">Fast access to information</span>
-              <span class="t-de">Schneller Zugriff auf Informationen</span><span class="t-es">Acceso rápido a la información</span>
-            </li>
-            <li>
-              <span class="t-si">Idealen za iskanje in prvi stik</span><span class="t-en">Ideal for searching and first contact</span>
-              <span class="t-de">Ideal für die Suche und den ersten Kontakt</span><span class="t-es">Ideal para búsquedas y el primer contacto</span>
-            </li>
-            <li>
-              <span class="t-si">Izgine, ko se zaslon zapre</span><span class="t-en">Disappears the moment the screen goes dark</span>
-              <span class="t-de">Verschwindet, sobald der Bildschirm ausgeht</span><span class="t-es">Desaparece en cuanto se apaga la pantalla</span>
-            </li>
-            <li>
-              <span class="t-si">Ne prenese občutka za material ali kakovost izdelave</span><span class="t-en">Can't convey material, texture, or craftsmanship</span>
-              <span class="t-de">Vermittelt weder Material, Haptik noch Verarbeitungsqualität</span><span class="t-es">No transmite el material, el tacto ni la calidad de fabricación</span>
-            </li>
-          </ul>
-        </div>
-        <div class="compare-col compare-offline">
-          <span class="compare-label">
-            <span class="t-si">Premium ofsetna vizitka</span><span class="t-en">Premium offset card</span>
-            <span class="t-de">Premium-Offsetkarte</span><span class="t-es">Tarjeta offset premium</span>
-          </span>
-          <ul>
-            <li>
-              <span class="t-si">Ostane po osebnem srečanju</span><span class="t-en">Stays behind after the meeting ends</span>
-              <span class="t-de">Bleibt nach dem persönlichen Treffen zurück</span><span class="t-es">Permanece después del encuentro personal</span>
-            </li>
-            <li>
-              <span class="t-si">Vašo znamko naredi fizično otipljivo</span><span class="t-en">Makes your brand physically tangible</span>
-              <span class="t-de">Macht Ihre Marke physisch greifbar</span><span class="t-es">Hace que su marca sea físicamente tangible</span>
-            </li>
-            <li>
-              <span class="t-si">Softtouch in parcialni UV lak ustvarita takojšen kakovosten vtis</span><span class="t-en">Soft-touch finish and spot UV create an instant impression of quality</span>
-              <span class="t-de">Softtouch-Oberfläche und partieller UV-Lack erzeugen sofort einen hochwertigen Eindruck</span><span class="t-es">El acabado soft-touch y el barniz UV parcial crean una impresión de calidad inmediata</span>
-            </li>
-            <li>
-              <span class="t-si">Lahko jo posredujejo odločevalcu ali sodelavcu</span><span class="t-en">Can be handed on to a decision-maker or colleague</span>
-              <span class="t-de">Kann an eine Entscheidungsperson oder Kollegen weitergereicht werden</span><span class="t-es">Puede entregarse a un responsable de decisiones o a un compañero</span>
-            </li>
-            <li>
-              <span class="t-si">Deluje brez telefona, povezave ali aplikacije</span><span class="t-en">Works without a phone, connection, or app</span>
-              <span class="t-de">Funktioniert ohne Telefon, Verbindung oder App</span><span class="t-es">Funciona sin teléfono, conexión ni aplicación</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="manifesto-close">
-        <span class="t-si">Digitalno vas naredi vidne. Premium vizitka vas naredi nepozabne.</span>
-        <span class="t-en">Be visible online. Be remembered in person.</span>
-        <span class="t-de">Online sichtbar. Persönlich unvergessen.</span>
-        <span class="t-es">Visible online. Inolvidable en persona.</span>
-      </p>
-    </div>
-  </section>
-
   <!-- ============ ORDER PROCESS (5 steps) ============ -->
   <section id="ablauf" class="process reg-corners">
     <div class="wrap">
@@ -1689,7 +1739,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       </ol>
 
       <a href="#konfigurator" class="btn btn-ghost" style="margin-top: 36px;">
-        <span class="t-si">Izračunaj svojo ceno</span><span class="t-en">Calculate your price</span>
+        <span class="t-si">Izračunajte svojo ceno</span><span class="t-en">Calculate your price</span>
         <span class="t-de">Preis berechnen</span><span class="t-es">Calcular su precio</span>
       </a>
     </div>
@@ -1877,7 +1927,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <span class="t-si">Da. V obrazcu izberete državo dostave, strošek pošiljanja pa je naveden na predračunu pred plačilom.</span>
             <span class="t-en">Yes. You choose the delivery country in the form, and the shipping cost is shown on the pro forma invoice before payment.</span>
             <span class="t-de">Ja. Im Formular wählen Sie das Lieferland, die Versandkosten werden auf der Proforma-Rechnung vor der Zahlung ausgewiesen.</span>
-            <span class="t-es">Sí. Elige el país de entrega en el formulario, y el coste de envío se indica en la factura proforma antes del pago.</span>
+            <span class="t-es">Sí. Elija el país de entrega en el formulario, y el coste de envío se indica en la factura proforma antes del pago.</span>
           </p></div>
         </div>
 
@@ -1967,8 +2017,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <label>Company website<input type="text" name="website" id="hpField" tabindex="-1" autocomplete="off"></label>
         </div>
 
+        <p class="form-group-h full">
+          <span class="form-group-step">01</span>
+          <span class="t-si">Izbran paket</span><span class="t-en">Selected package</span>
+          <span class="t-de">Gewähltes Paket</span><span class="t-es">Paquete elegido</span>
+        </p>
         <div class="config-item-desc full" id="selectedPackageRecap" style="margin: 0 0 4px;"></div>
 
+        <p class="form-group-h full">
+          <span class="form-group-step">02</span>
+          <span class="t-si">Kontakt in podjetje</span><span class="t-en">Contact & company</span>
+          <span class="t-de">Kontakt und Unternehmen</span><span class="t-es">Contacto y empresa</span>
+        </p>
         <label>
           <span class="t-si">Ime in priimek</span><span class="t-en">Full name</span>
           <span class="t-de">Vor- und Nachname</span><span class="t-es">Nombre completo</span>
@@ -2006,7 +2066,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <span class="field-error" id="err-previousOrderNumber" role="alert"></span>
         </label>
 
-        <p class="config-group-label full" style="margin-top: 6px;">
+        <p class="form-group-h full">
+          <span class="form-group-step">03</span>
           <span class="t-si">Naslov za račun</span><span class="t-en">Billing address</span>
           <span class="t-de">Rechnungsadresse</span><span class="t-es">Dirección de facturación</span>
         </p>
@@ -2035,6 +2096,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <span class="field-error" id="err-billingCountry" role="alert"></span>
         </label>
 
+        <p class="form-group-h full">
+          <span class="form-group-step">04</span>
+          <span class="t-si">Naslov za dostavo</span><span class="t-en">Shipping address</span>
+          <span class="t-de">Lieferadresse</span><span class="t-es">Dirección de envío</span>
+        </p>
         <label class="checkbox-row full">
           <input type="checkbox" name="shippingSameAsBilling" id="shippingSameAsBilling" checked>
           <span>
@@ -2044,10 +2110,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </label>
 
         <div class="full" id="shippingAddressBlock" hidden style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px 20px;">
-          <p class="config-group-label full" style="margin: 6px 0 0;">
-            <span class="t-si">Naslov za dostavo</span><span class="t-en">Shipping address</span>
-            <span class="t-de">Lieferadresse</span><span class="t-es">Dirección de envío</span>
-          </p>
           <label class="full">
             <span class="t-si">Ulica in hišna številka</span><span class="t-en">Street and number</span>
             <span class="t-de">Straße und Hausnummer</span><span class="t-es">Calle y número</span>
@@ -2074,19 +2136,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           </label>
         </div>
 
-        <label class="full">
-          <span class="t-si">Sporočilo</span><span class="t-en">Message</span>
-          <span class="t-de">Nachricht</span><span class="t-es">Mensaje</span>
-          <textarea name="message" rows="3"></textarea>
-        </label>
-
         <!-- ===== FILE UPLOADS (shown only for first orders; only the field
              matching the selected design service is visible) ===== -->
+        <p class="form-group-h full">
+          <span class="form-group-step">05</span>
+          <span class="t-si">Drukovna datoteka ali gradivo za oblikovanje</span><span class="t-en">Print files or design briefing</span>
+          <span class="t-de">Druckdaten oder Design-Briefing</span><span class="t-es">Archivos de impresión o briefing de diseño</span>
+        </p>
         <div class="full" id="uploadsBlock">
-          <p class="config-group-label">
-            <span class="t-si">Datoteke</span><span class="t-en">Files</span>
-            <span class="t-de">Dateien</span><span class="t-es">Archivos</span>
-          </p>
           <p class="config-item-desc" style="margin: 0 0 10px;">
             <span class="t-si">Dovoljeni formati: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Največ 25&nbsp;MB na datoteko.</span>
             <span class="t-en">Allowed formats: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Maximum 25&nbsp;MB per file.</span>
@@ -2144,14 +2201,31 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </div>
 
         <!-- ===== PER-PERSON FIELDS (dynamically generated) ===== -->
+        <p class="form-group-h full">
+          <span class="form-group-step">06</span>
+          <span class="t-si">Podatki oseb na vizitkah</span><span class="t-en">Cardholder details</span>
+          <span class="t-de">Angaben der Karteninhaber</span><span class="t-es">Datos de los titulares de las tarjetas</span>
+        </p>
         <div class="full" id="peopleFieldsBlock">
-          <p class="config-group-label">
-            <span class="t-si">Podatki oseb</span><span class="t-en">Team details</span>
-            <span class="t-de">Team-Angaben</span><span class="t-es">Datos del equipo</span>
-          </p>
           <div id="peopleFieldsList"><!-- injected by JS: one block per person --></div>
         </div>
 
+        <p class="form-group-h full">
+          <span class="form-group-step">07</span>
+          <span class="t-si">Sporočilo</span><span class="t-en">Message</span>
+          <span class="t-de">Nachricht</span><span class="t-es">Mensaje</span>
+        </p>
+        <label class="full">
+          <span class="t-si">Sporočilo (neobvezno)</span><span class="t-en">Message (optional)</span>
+          <span class="t-de">Nachricht (optional)</span><span class="t-es">Mensaje (opcional)</span>
+          <textarea name="message" rows="3"></textarea>
+        </label>
+
+        <p class="form-group-h full">
+          <span class="form-group-step">08</span>
+          <span class="t-si">Zasebnost in pogoji</span><span class="t-en">Privacy & terms</span>
+          <span class="t-de">Datenschutz und Verkaufsbedingungen</span><span class="t-es">Privacidad y condiciones</span>
+        </p>
         <label class="checkbox-row full">
           <input type="checkbox" name="privacyConsent" required>
           <span>
@@ -2173,6 +2247,17 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </label>
         <span class="field-error full" id="err-termsConsent" role="alert"></span>
 
+        <p class="form-group-h full">
+          <span class="form-group-step">09</span>
+          <span class="t-si">Oddaja povpraševanja</span><span class="t-en">Submit your request</span>
+          <span class="t-de">Anfrage absenden</span><span class="t-es">Enviar la solicitud</span>
+        </p>
+        <p class="config-item-desc full" style="margin: 0 0 12px;">
+          <span class="t-si">S klikom na spodnji gumb še ne plačate ničesar. Prejeli boste predračun z vsemi stroški, vključno z dostavo.</span>
+          <span class="t-en">Clicking the button below does not charge you anything yet. You'll receive a pro forma invoice with all costs, including shipping.</span>
+          <span class="t-de">Mit dem Klick auf den Button unten zahlen Sie noch nichts. Sie erhalten eine Proforma-Rechnung mit allen Kosten, inklusive Versand.</span>
+          <span class="t-es">Al hacer clic en el botón no se realiza ningún cobro todavía. Recibirá una factura proforma con todos los costes, incluido el envío.</span>
+        </p>
         <button type="submit" class="btn btn-primary btn-wide full" id="submitOrderBtn">
           <span class="t-si">Pošlji povpraševanje</span><span class="t-en">Submit order request</span>
           <span class="t-de">Anfrage senden</span><span class="t-es">Enviar solicitud</span>
@@ -2227,7 +2312,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <!-- ============ MOBILE STICKY CTA ============ -->
 <div class="sticky-cta" id="stickyCta" hidden>
   <a href="#konfigurator" class="sticky-cta-link" id="stickyCtaLink">
-    <span class="t-si">Od 111 € | Izberi paket</span><span class="t-en">From €111 | Choose package</span>
+    <span class="t-si">Od 111 € | Izberite paket</span><span class="t-en">From €111 | Choose package</span>
     <span class="t-de">Ab 111 € | Paket wählen</span><span class="t-es">Desde 111 € | Elegir paquete</span>
   </a>
 </div>
@@ -2314,18 +2399,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (registered) {
       if (heroFirstLabelEl) heroFirstLabelEl.innerHTML = langSpans({
-        si: `Prvo naročilo <em>(bruto, DDV vključen)</em>`, en: `First order <em>(gross, VAT included)</em>`
+        si: `Prvo naročilo <em>(bruto, DDV vključen)</em>`, en: `First order <em>(gross, VAT included)</em>`,
+        de: `Erstbestellung <em>(brutto, inkl. USt.)</em>`, es: `Primer pedido <em>(bruto, IVA incluido)</em>`
       });
       if (heroRepeatLabelEl) heroRepeatLabelEl.innerHTML = langSpans({
-        si: `Nespremenjeno ponovno naročilo <em>(bruto)</em>`, en: `Unchanged repeat order <em>(gross)</em>`
+        si: `Nespremenjeno ponovno naročilo <em>(bruto)</em>`, en: `Unchanged repeat order <em>(gross)</em>`,
+        de: `Unveränderte Nachbestellung <em>(brutto)</em>`, es: `Pedido repetido sin cambios <em>(bruto)</em>`
       });
       if (note1) note1.innerHTML = langSpans({
         si: `Neto cena: ${fmtEUR(heroFirst.net)} + ${Math.round(SELLER_CONFIG.VAT_RATE*100)}% DDV (${fmtEUR(heroFirst.vat)}) = ${fmtEUR(heroFirst.gross)} bruto za prvo naročilo.`,
-        en: `Net price: ${fmtEUR(heroFirst.net)} + ${Math.round(SELLER_CONFIG.VAT_RATE*100)}% VAT (${fmtEUR(heroFirst.vat)}) = ${fmtEUR(heroFirst.gross)} gross for the first order.`
+        en: `Net price: ${fmtEUR(heroFirst.net)} + ${Math.round(SELLER_CONFIG.VAT_RATE*100)}% VAT (${fmtEUR(heroFirst.vat)}) = ${fmtEUR(heroFirst.gross)} gross for the first order.`,
+        de: `Nettopreis: ${fmtEUR(heroFirst.net)} + ${Math.round(SELLER_CONFIG.VAT_RATE*100)}% USt. (${fmtEUR(heroFirst.vat)}) = ${fmtEUR(heroFirst.gross)} brutto für die Erstbestellung.`,
+        es: `Precio neto: ${fmtEUR(heroFirst.net)} + ${Math.round(SELLER_CONFIG.VAT_RATE*100)}% IVA (${fmtEUR(heroFirst.vat)}) = ${fmtEUR(heroFirst.gross)} bruto para el primer pedido.`
       });
       if (note2) note2.innerHTML = langSpans({
         si: `Vse cene vključujejo DDV po stopnji ${Math.round(SELLER_CONFIG.VAT_RATE*100)} %.`,
-        en: `All prices include VAT at ${Math.round(SELLER_CONFIG.VAT_RATE*100)}%.`
+        en: `All prices include VAT at ${Math.round(SELLER_CONFIG.VAT_RATE*100)}%.`,
+        de: `Alle Preise verstehen sich inkl. ${Math.round(SELLER_CONFIG.VAT_RATE*100)} % USt.`,
+        es: `Todos los precios incluyen el ${Math.round(SELLER_CONFIG.VAT_RATE*100)} % de IVA.`
       });
     }
     // when exempt, the hero keeps its original static SI/EN Article-94 text — no change needed
@@ -2340,10 +2431,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // total row: show net + VAT + gross, not just one number
             span.innerHTML = langSpans({
               si: `${fmtEUR(v.gross)} <em>(neto ${fmtEUR(v.net)} + DDV ${fmtEUR(v.vat)})</em>`,
-              en: `${fmtEUR(v.gross)} <em>(net ${fmtEUR(v.net)} + VAT ${fmtEUR(v.vat)})</em>`
+              en: `${fmtEUR(v.gross)} <em>(net ${fmtEUR(v.net)} + VAT ${fmtEUR(v.vat)})</em>`,
+              de: `${fmtEUR(v.gross)} <em>(netto ${fmtEUR(v.net)} + USt. ${fmtEUR(v.vat)})</em>`,
+              es: `${fmtEUR(v.gross)} <em>(neto ${fmtEUR(v.net)} + IVA ${fmtEUR(v.vat)})</em>`
             });
           } else {
-            span.textContent = fmtEUR(v.net) + ' ' + '(neto)';
+            span.textContent = fmtEUR(v.net) + ' ' + pick({ si: '(neto)', en: '(net)', de: '(netto)', es: '(neto)' });
           }
         });
       });
@@ -2545,7 +2638,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (prepPriceEl) {
       prepPriceEl.innerHTML = isFirst
         ? '12&nbsp;€'
-        : langSpans({ si: '0&nbsp;€ (odpade)', en: '€0 (waived)' });
+        : langSpans({
+            si: '0&nbsp;€ (odpade)', en: '€0 (waived)',
+            de: '0&nbsp;€ (entfällt)', es: '0&nbsp;€ (anulado)'
+          });
     }
     if (peopleQtyValueEl) peopleQtyValueEl.textContent = people;
     if (personalizationNoteEl) personalizationNoteEl.hidden = !(isFirst && extraPeople > 0);
@@ -2631,10 +2727,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (selectedPackageRecap) {
       selectedPackageRecap.innerHTML = langSpans({
-        si: `Izbran paket: ${DESIGN_LABELS[designValue] ? pick(DESIGN_LABELS[designValue]) : ''}${isFirst ? '' : '(nespremenjeno ponovno naročilo)'} · ${people} oseb(a) · ${totalCardsDot} vizitk · skupaj ${displayTotal} € pred dostavo.`,
-        en: `Selected package: ${isFirst ? pick(DESIGN_LABELS[designValue]) : 'Unchanged repeat order'} · ${people} people · ${totalCardsComma} cards · total €${displayTotal} before shipping.`,
-        de: `Gewähltes Paket: ${isFirst ? pick(DESIGN_LABELS[designValue]) : 'Unveränderte Nachbestellung'} · ${people} Personen · ${totalCardsDot} Karten · gesamt ${displayTotal} € vor Versand.`,
-        es: `Paquete elegido: ${isFirst ? pick(DESIGN_LABELS[designValue]) : 'Pedido repetido sin cambios'} · ${people} personas · ${totalCardsDot} tarjetas · total ${displayTotal} € antes del envío.`
+        si: `Izbran paket: ${isFirst ? pick(DESIGN_LABELS[designValue]) : 'Nespremenjeno ponovno naročilo'} · število oseb: ${people} · ${totalCardsDot} vizitk · skupaj ${displayTotal} € pred dostavo.`,
+        en: `Selected package: ${isFirst ? pick(DESIGN_LABELS[designValue]) : 'Unchanged repeat order'} · ${people === 1 ? '1 person' : `${people} people`} · ${totalCardsComma} cards · total €${displayTotal} before shipping.`,
+        de: `Gewähltes Paket: ${isFirst ? pick(DESIGN_LABELS[designValue]) : 'Unveränderte Nachbestellung'} · ${people === 1 ? '1 Person' : `${people} Personen`} · ${totalCardsDot} Karten · gesamt ${displayTotal} € vor Versand.`,
+        es: `Paquete elegido: ${isFirst ? pick(DESIGN_LABELS[designValue]) : 'Pedido repetido sin cambios'} · ${people === 1 ? '1 persona' : `${people} personas`} · ${totalCardsDot} tarjetas · total ${displayTotal} € antes del envío.`
       });
     }
 
