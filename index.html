@@ -136,6 +136,14 @@ html[data-lang="es"] .t-es { display: inline; }
   color: var(--on-void);
   white-space: nowrap;
 }
+.header-brand { display: flex; flex-direction: column; gap: 1px; }
+.header-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  opacity: 0.8;
+}
 .wordmark em { color: var(--gold-bright); font-style: italic; }
 .wordmark .tld { color: var(--gold); font-style: italic; }
 .wordmark.small { font-size: 1.1rem; color: var(--ink); }
@@ -267,8 +275,9 @@ html[data-lang="es"] .t-es { display: inline; }
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   gap: 56px;
-  align-items: center;
+  align-items: start;
 }
+.hero-visual { padding-top: 6px; }
 .hero-copy, .hero-visual { min-width: 0; }
 
 .eyebrow {
@@ -318,6 +327,38 @@ html[data-lang="es"] .t-es { display: inline; }
   max-width: 420px;
   background: rgba(203,163,92,0.05);
 }
+.hero-value-line {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.08rem;
+  color: var(--on-void);
+  margin: -6px 0 20px;
+}
+.hero-value-line em { color: var(--gold-bright); font-style: italic; }
+.hero-savings-note { color: var(--gold); opacity: 0.95; }
+.hero-slots {
+  max-width: 420px;
+  margin-top: -4px;
+}
+.hero-slots-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(203,163,92,0.18);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.hero-slots-bar span {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  border-radius: 2px;
+}
+.hero-slots-text {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--on-void-soft);
+  letter-spacing: 0.02em;
+}
 .hero-price-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .hero-price-row + .hero-price-row { margin-top: 6px; }
 .hero-price-row .hero-price-label { font-family: var(--font-mono); font-size: 0.82rem; color: var(--on-void-soft); }
@@ -340,6 +381,12 @@ html[data-lang="es"] .t-es { display: inline; }
   background: radial-gradient(circle, rgba(228,196,134,0.18), transparent 68%);
   filter: blur(20px);
 }
+.hero-shot-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  display: block;
+}
 .hero-product-shot img {
   width: 100%;
   height: auto;
@@ -348,6 +395,32 @@ html[data-lang="es"] .t-es { display: inline; }
     drop-shadow(0 2px 3px rgba(0,0,0,0.35))
     drop-shadow(0 18px 28px rgba(0,0,0,0.32))
     drop-shadow(0 44px 60px rgba(0,0,0,0.24));
+}
+/* subtle, infrequent light sweep across the photo — a slow diagonal
+   band of soft highlight, mostly paused, not a constant "plastic"
+   shine. Kept low-opacity so it reads as a passing reflection, not
+   an animated overlay effect. Contained within .hero-shot-frame so
+   it never spills past the photo's own edges. */
+.hero-shot-sheen {
+  position: absolute;
+  top: -20%;
+  left: -60%;
+  width: 42%;
+  height: 140%;
+  background: linear-gradient(100deg,
+    transparent 0%,
+    rgba(255,255,255,0.10) 35%,
+    rgba(255,250,235,0.45) 50%,
+    rgba(255,255,255,0.10) 65%,
+    transparent 100%);
+  transform: rotate(12deg);
+  pointer-events: none;
+  animation: hero-sheen-pass 3.4s ease-in-out infinite;
+}
+@keyframes hero-sheen-pass {
+  0% { left: -60%; }
+  62% { left: 130%; }
+  100% { left: 130%; }
 }
 .hero-product-shot::after {
   content: "";
@@ -359,12 +432,6 @@ html[data-lang="es"] .t-es { display: inline; }
   z-index: -1;
   background: radial-gradient(ellipse, rgba(0,0,0,0.42) 0%, transparent 72%);
   filter: blur(6px);
-}
-
-/* shared with .uv-swatch-mark in the quality section's UV highlight block */
-@keyframes uv-catch-text {
-  0%, 20%, 100% { background-position: 120% 0; }
-  55% { background-position: -20% 0; }
 }
 
 .spec-tag {
@@ -568,38 +635,51 @@ section h2 {
   aspect-ratio: 4 / 3;
   min-height: 180px;
   border-radius: 14px;
-  background:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.05'/></svg>"),
-    linear-gradient(155deg, #4a3a22 0%, #2b2013 55%, #17110a 100%);
   box-shadow: 0 18px 34px -10px rgba(15,13,10,0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
 }
-.uv-swatch-mark {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  background: linear-gradient(115deg, var(--card-white) 30%, #fffef8 46%, #fffef8 50%, var(--card-white) 66%);
-  background-size: 260% 100%;
-  background-position: 120% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: var(--card-white);
-  animation: uv-catch-text 6s ease-in-out infinite;
+.uv-swatch-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* a soft diagonal light sweep across the whole swatch, illustrating
+   how the UV coating catches light — same technique as the hero
+   photo's sheen, kept infrequent and low-opacity so it reads as a
+   passing reflection rather than a constant glossy overlay */
+.uv-swatch-sheen {
+  position: absolute;
+  top: -25%;
+  left: -70%;
+  width: 50%;
+  height: 150%;
+  background: linear-gradient(100deg,
+    transparent 0%,
+    rgba(255,255,255,0.10) 38%,
+    rgba(255,250,235,0.55) 50%,
+    rgba(255,255,255,0.10) 62%,
+    transparent 100%);
+  transform: rotate(12deg);
+  pointer-events: none;
+  animation: hero-sheen-pass 3.2s ease-in-out infinite;
+  animation-delay: 0.8s;
 }
 .uv-swatch-caption {
   position: absolute;
   bottom: 12px;
-  left: 0; right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
   font-family: var(--font-mono);
   font-size: 0.6rem;
   letter-spacing: 0.08em;
-  color: rgba(251,249,244,0.5);
+  color: rgba(251,249,244,0.85);
+  background: rgba(15,13,10,0.55);
+  padding: 5px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(2px);
+  white-space: nowrap;
 }
 @media (max-width: 900px) {
   .uv-highlight { grid-template-columns: 1fr; }
@@ -671,10 +751,17 @@ section h2 {
 .acc-item.is-open .acc-panel { max-height: 220px; }
 
 /* ---------- final CTA / form ---------- */
-.final-cta { background: var(--void); color: var(--on-void); --reg-color: rgba(203,163,92,0.45); }
+.final-cta { background: var(--void-2); color: var(--on-void); --reg-color: rgba(203,163,92,0.45); }
 .final-cta .section-eyebrow { color: var(--gold); }
 .final-cta h2 { color: var(--on-void); max-width: 16ch; }
 .final-cta-copy p:not(.section-eyebrow) { color: var(--on-void-soft); max-width: 42ch; }
+.config-slogan {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.02rem;
+  margin-top: 14px;
+}
+.config-slogan em { color: var(--gold-bright); font-style: italic; }
 
 .final-cta-inner {
   display: grid;
@@ -951,10 +1038,13 @@ section h2 {
   opacity: 0.6;
   margin: 10px 0 0;
 }
+.footer-credit a { color: inherit; text-decoration: none; }
+.footer-credit a:hover { text-decoration: underline; }
 .footer-links { display: flex; gap: 24px; font-size: 0.88rem; color: var(--ink-soft); align-items: center; flex-wrap: wrap; }
 .footer-legal { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.7; margin: 10px 0; }
 .footer-vat-note { font-size: 0.78rem; color: var(--ink-faint); margin: 0 0 10px; max-width: 46ch; }
 .footer-custom-note { font-size: 0.76rem; color: var(--ink-faint); border-top: 1px solid var(--line); padding-top: 16px; margin-top: 20px; }
+.footer-copyright { font-size: 0.72rem; color: var(--ink-faint); margin: 10px 0 0; }
 
 .sticky-cta {
   position: fixed;
@@ -997,7 +1087,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .uv-swatch-mark { animation: none; }
+  .uv-swatch-sheen { animation: none; display: none; }
+  .hero-shot-sheen { animation: none; display: none; }
   .btn, .acc-panel, .acc-icon { transition: none; }
 }
 
@@ -1031,7 +1122,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 <header class="site-header">
   <div class="wrap header-inner">
-    <a href="#top" class="wordmark">premium<em>cards</em><span class="tld">.si</span></a>
+    <div class="header-brand">
+      <a href="#top" class="wordmark">premium<em>cards</em><span class="tld">.si</span></a>
+      <span class="header-tagline">BE REMEMBERED.</span>
+    </div>
 
     <nav class="main-nav">
       <a href="#kakovost"><span class="t-si">Kakovost</span><span class="t-en">Quality</span><span class="t-de">Qualität</span><span class="t-es">Calidad</span></a>
@@ -1085,6 +1179,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <span class="t-es">500 tarjetas premium. Impresión offset. Cartulina mate de 350g. Acabado soft-touch a doble cara. Barniz UV parcial. Esquinas redondeadas.</span>
         </p>
 
+        <p class="hero-value-line">
+          <span class="t-si">Premium vizitka. <em>Brez premium cene.</em></span>
+          <span class="t-en">A premium card. <em>Without the premium price.</em></span>
+          <span class="t-de">Eine Premium-Karte. <em>Ohne Premium-Preis.</em></span>
+          <span class="t-es">Una tarjeta premium. <em>Sin precio premium.</em></span>
+        </p>
+
         <div class="hero-price-block">
           <div class="hero-price-row">
             <span class="hero-price-label" id="heroFirstPriceLabel">
@@ -1112,6 +1213,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <span class="t-de">Preise sind Endpreise. Keine Umsatzsteuer (Artikel 94 des slowenischen USt-Gesetzes).</span>
             <span class="t-es">Los precios son finales. No se aplica IVA (artículo 94 de la Ley del IVA eslovena).</span>
           </p>
+          <p class="hero-price-note hero-savings-note">
+            <span class="t-si">Enakovreden posamični tisk drugje pogosto stane tudi do 70&nbsp;% več.</span>
+            <span class="t-en">Equivalent individual printing elsewhere often costs up to 70% more.</span>
+            <span class="t-de">Vergleichbarer Einzeldruck kostet anderswo oft bis zu 70&nbsp;% mehr.</span>
+            <span class="t-es">Una impresión individual equivalente en otro lugar suele costar hasta un 70&nbsp;% más.</span>
+          </p>
         </div>
 
         <div class="hero-ctas">
@@ -1124,18 +1231,31 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <span class="t-de">Qualität entdecken</span><span class="t-es">Descubrir la calidad</span>
           </a>
         </div>
+
+        <div class="hero-slots">
+          <div class="hero-slots-bar"><span style="width: 72%;"></span></div>
+          <p class="hero-slots-text">
+            <span class="t-si">18 od 25 prostih mest za ta teden — mesto je rezervirano ob plačilu.</span>
+            <span class="t-en">18 of 25 slots open this week — your slot is secured upon payment.</span>
+            <span class="t-de">18 von 25 Plätzen diese Woche frei — Ihr Platz ist mit der Zahlung gesichert.</span>
+            <span class="t-es">18 de 25 plazas disponibles esta semana — su plaza queda asegurada con el pago.</span>
+          </p>
+        </div>
       </div>
 
       <div class="hero-visual" aria-hidden="true">
         <figure class="hero-product-shot">
-          <img
-            src="assets/hero-cards-croco-uv-v3.png"
-            alt=""
-            width="1536"
-            height="1024"
-            decoding="async"
-            fetchpriority="high"
-          >
+          <span class="hero-shot-frame">
+            <img
+              src="assets/hero-cards-croco-uv-v3.png"
+              alt=""
+              width="1536"
+              height="1024"
+              decoding="async"
+              fetchpriority="high"
+            >
+            <span class="hero-shot-sheen"></span>
+          </span>
         </figure>
         <div class="spec-tag">
           <span class="dot dot-forest"></span>
@@ -1297,7 +1417,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </div>
         <div class="uv-highlight-visual">
           <div class="uv-swatch" aria-hidden="true">
-            <span class="uv-swatch-mark">UV</span>
+            <img src="assets/uv-lak-detail.png" alt="" class="uv-swatch-photo">
+            <span class="uv-swatch-sheen"></span>
             <span class="uv-swatch-caption">
               <span class="t-si">PARCIALNI UV LAK</span>
               <span class="t-en">SPOT UV</span>
@@ -1419,6 +1540,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <span class="t-en">Choose a ready file, a design service, a redesign or a new logo, add the number of people — the price updates live.</span>
           <span class="t-de">Wählen Sie eine fertige Datei, einen Designservice, ein Redesign oder ein neues Logo, fügen Sie die Personenzahl hinzu — der Preis wird live berechnet.</span>
           <span class="t-es">Elija un archivo listo, un servicio de diseño, un rediseño o un nuevo logotipo, añada el número de personas — el precio se calcula al instante.</span>
+        </p>
+        <p class="config-slogan">
+          <span class="t-si">Počasi se daleč pride — <em>in tudi do 70&nbsp;% ceneje.</em></span>
+          <span class="t-en">Good things take time — <em>and can cost up to 70% less.</em></span>
+          <span class="t-de">Eile mit Weile — <em>und sparen Sie dabei bis zu 70&nbsp;%.</em></span>
+          <span class="t-es">Las prisas no son buenas consejeras — <em>ahorre hasta un 70&nbsp;%.</em></span>
         </p>
       </div>
 
@@ -1651,7 +1778,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </div>
       </div>
 
-      <a href="#anketa" class="btn btn-primary btn-wide" id="calcCta">
+      <a href="#anketa" class="btn btn-primary btn-wide" id="calcCta" style="grid-column: 2;">
         <span class="t-si">Pošlji povpraševanje — 111 € / 500 vizitk</span><span class="t-en">Submit order request — €111 / 500 cards</span>
         <span class="t-de">Anfrage senden — 111 € / 500 Karten</span><span class="t-es">Enviar solicitud — 111 € / 500 tarjetas</span>
       </a>
@@ -1691,10 +1818,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <span class="t-de">Daten senden</span><span class="t-es">Envíe sus datos</span>
           </h3>
           <p>
-            <span class="t-si">Naložite PDF, logotip ali obstoječo vizitko. Dodajte kontaktne podatke vseh oseb.</span>
-            <span class="t-en">Upload your PDF, logo or existing business card. Add the contact details for every person.</span>
-            <span class="t-de">Laden Sie Ihre PDF, Ihr Logo oder Ihre bestehende Visitenkarte hoch. Fügen Sie die Kontaktdaten aller Personen hinzu.</span>
-            <span class="t-es">Suba su PDF, logotipo o tarjeta existente. Añada los datos de contacto de todas las personas.</span>
+            <span class="t-si">Naložite PDF, logotip ali obstoječo vizitko. Dodajte kontaktne podatke vseh oseb. Datoteke lahko namesto tega tudi pošljete na order@premiumcards.si.</span>
+            <span class="t-en">Upload your PDF, logo or existing business card. Add the contact details for every person. You can also simply email your files to order@premiumcards.si instead.</span>
+            <span class="t-de">Laden Sie Ihre PDF, Ihr Logo oder Ihre bestehende Visitenkarte hoch. Fügen Sie die Kontaktdaten aller Personen hinzu. Sie können Ihre Dateien stattdessen auch einfach an order@premiumcards.si senden.</span>
+            <span class="t-es">Suba su PDF, logotipo o tarjeta existente. Añada los datos de contacto de todas las personas. También puede simplemente enviarnos sus archivos por correo a order@premiumcards.si.</span>
           </p>
         </li>
         <li>
@@ -1730,10 +1857,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <span class="t-de">Druck und Lieferung</span><span class="t-es">Impresión y entrega</span>
           </h3>
           <p>
-            <span class="t-si">Vizitke natisnemo, pregledamo, varno zapakiramo in pošljemo na vaš naslov.</span>
-            <span class="t-en">We print, inspect, securely pack and ship your business cards.</span>
-            <span class="t-de">Wir drucken, prüfen, verpacken sicher und versenden Ihre Visitenkarten.</span>
-            <span class="t-es">Imprimimos, inspeccionamos, embalamos de forma segura y enviamos sus tarjetas.</span>
+            <span class="t-si">Vizitke natisnemo, pregledamo, varno zapakiramo in pošljemo na vaš naslov. Od potrditve tiska do dostave običajno mine 8–12 delovnih dni.</span>
+            <span class="t-en">We print, inspect, securely pack and ship your business cards. From print approval to delivery typically takes 8–12 working days.</span>
+            <span class="t-de">Wir drucken, prüfen, verpacken sicher und versenden Ihre Visitenkarten. Von der Druckfreigabe bis zur Lieferung vergehen in der Regel 8–12 Werktage.</span>
+            <span class="t-es">Imprimimos, inspeccionamos, embalamos de forma segura y enviamos sus tarjetas. Desde la aprobación de impresión hasta la entrega suelen pasar de 8 a 12 días laborables.</span>
           </p>
         </li>
       </ol>
@@ -1908,10 +2035,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <span class="acc-icon">+</span>
           </button>
           <div class="acc-panel" id="faq-panel-10" role="region" aria-labelledby="faq-trigger-10" hidden><p>
-            <span class="t-si">Pred plačilom prejmete predvideni rok izdelave in dostave. Rok je odvisen od trenutnega produkcijskega termina, vaše potrditve datoteke in države dostave.</span>
-            <span class="t-en">Before payment, you receive the estimated production and delivery date. Timing depends on the current production schedule, your file approval and the destination country.</span>
-            <span class="t-de">Vor der Zahlung erhalten Sie den voraussichtlichen Produktions- und Liefertermin. Der Zeitpunkt hängt vom aktuellen Produktionsplan, Ihrer Dateifreigabe und dem Zielland ab.</span>
-            <span class="t-es">Antes del pago recibe la fecha estimada de producción y entrega. El plazo depende del calendario de producción actual, su aprobación del archivo y el país de destino.</span>
+            <span class="t-si">Od potrditve tiska do dostave običajno mine 8–12 delovnih dni, odvisno od trenutnega produkcijskega termina in države dostave. Točen rok prejmete na predračunu pred plačilom.</span>
+            <span class="t-en">From print approval to delivery typically takes 8–12 working days, depending on the current production schedule and destination country. You'll receive the exact timeline on the pro forma invoice before payment.</span>
+            <span class="t-de">Von der Druckfreigabe bis zur Lieferung vergehen in der Regel 8–12 Werktage, abhängig vom aktuellen Produktionsplan und dem Zielland. Den genauen Termin erhalten Sie auf der Proforma-Rechnung vor der Zahlung.</span>
+            <span class="t-es">Desde la aprobación de impresión hasta la entrega suelen pasar de 8 a 12 días laborables, según el calendario de producción actual y el país de destino. Recibirá el plazo exacto en la factura proforma antes del pago.</span>
           </p></div>
         </div>
 
@@ -1972,10 +2099,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <span class="acc-icon">+</span>
           </button>
           <div class="acc-panel" id="faq-panel-14" role="region" aria-labelledby="faq-trigger-14" hidden><p>
-            <span class="t-si">PDF, SVG, EPS, AI, PNG, JPG in ZIP, do 25 MB na datoteko.</span>
-            <span class="t-en">PDF, SVG, EPS, AI, PNG, JPG and ZIP, up to 25&nbsp;MB per file.</span>
-            <span class="t-de">PDF, SVG, EPS, AI, PNG, JPG und ZIP, bis zu 25&nbsp;MB pro Datei.</span>
-            <span class="t-es">PDF, SVG, EPS, AI, PNG, JPG y ZIP, hasta 25&nbsp;MB por archivo.</span>
+            <span class="t-si">PDF, SVG, EPS, AI, PNG, JPG in ZIP, do 25 MB na datoteko. Datoteke lahko namesto nalaganja tudi preprosto pošljete na order@premiumcards.si.</span>
+            <span class="t-en">PDF, SVG, EPS, AI, PNG, JPG and ZIP, up to 25&nbsp;MB per file. You can also simply email your files to order@premiumcards.si instead of uploading them.</span>
+            <span class="t-de">PDF, SVG, EPS, AI, PNG, JPG und ZIP, bis zu 25&nbsp;MB pro Datei. Sie können Ihre Dateien statt des Uploads auch einfach an order@premiumcards.si senden.</span>
+            <span class="t-es">PDF, SVG, EPS, AI, PNG, JPG y ZIP, hasta 25&nbsp;MB por archivo. En lugar de subirlos, también puede enviarnos sus archivos por correo a order@premiumcards.si.</span>
           </p></div>
         </div>
 
@@ -2145,10 +2272,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </p>
         <div class="full" id="uploadsBlock">
           <p class="config-item-desc" style="margin: 0 0 10px;">
-            <span class="t-si">Dovoljeni formati: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Največ 25&nbsp;MB na datoteko.</span>
-            <span class="t-en">Allowed formats: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Maximum 25&nbsp;MB per file.</span>
-            <span class="t-de">Erlaubte Formate: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Maximal 25&nbsp;MB pro Datei.</span>
-            <span class="t-es">Formatos permitidos: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Máximo 25&nbsp;MB por archivo.</span>
+            <span class="t-si">Dovoljeni formati: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Največ 25&nbsp;MB na datoteko. Datoteke lahko namesto nalaganja tudi pošljete na order@premiumcards.si.</span>
+            <span class="t-en">Allowed formats: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Maximum 25&nbsp;MB per file. You can also simply email your files to order@premiumcards.si instead.</span>
+            <span class="t-de">Erlaubte Formate: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Maximal 25&nbsp;MB pro Datei. Sie können Ihre Dateien auch einfach an order@premiumcards.si senden.</span>
+            <span class="t-es">Formatos permitidos: PDF, SVG, EPS, AI, PNG, JPG, ZIP. Máximo 25&nbsp;MB por archivo. También puede enviarnos sus archivos por correo a order@premiumcards.si.</span>
           </p>
 
           <label class="full" id="uploadPdfRow">
@@ -2253,10 +2380,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <span class="t-de">Anfrage absenden</span><span class="t-es">Enviar la solicitud</span>
         </p>
         <p class="config-item-desc full" style="margin: 0 0 12px;">
-          <span class="t-si">S klikom na spodnji gumb še ne plačate ničesar. Prejeli boste predračun z vsemi stroški, vključno z dostavo.</span>
-          <span class="t-en">Clicking the button below does not charge you anything yet. You'll receive a pro forma invoice with all costs, including shipping.</span>
-          <span class="t-de">Mit dem Klick auf den Button unten zahlen Sie noch nichts. Sie erhalten eine Proforma-Rechnung mit allen Kosten, inklusive Versand.</span>
-          <span class="t-es">Al hacer clic en el botón no se realiza ningún cobro todavía. Recibirá una factura proforma con todos los costes, incluido el envío.</span>
+          <span class="t-si">S klikom na spodnji gumb še ne plačate ničesar. Prejeli boste predračun z vsemi stroški, vključno z dostavo. Od potrditve tiska do dostave običajno mine 8–12 delovnih dni.</span>
+          <span class="t-en">Clicking the button below does not charge you anything yet. You'll receive a pro forma invoice with all costs, including shipping. From print approval to delivery typically takes 8–12 working days.</span>
+          <span class="t-de">Mit dem Klick auf den Button unten zahlen Sie noch nichts. Sie erhalten eine Proforma-Rechnung mit allen Kosten, inklusive Versand. Von der Druckfreigabe bis zur Lieferung vergehen in der Regel 8–12 Werktage.</span>
+          <span class="t-es">Al hacer clic en el botón no se realiza ningún cobro todavía. Recibirá una factura proforma con todos los costes, incluido el envío. Desde la aprobación de impresión hasta la entrega suelen pasar de 8 a 12 días laborables.</span>
         </p>
         <button type="submit" class="btn btn-primary btn-wide full" id="submitOrderBtn">
           <span class="t-si">Pošlji povpraševanje</span><span class="t-en">Submit order request</span>
@@ -2286,8 +2413,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <span class="t-es">Todos los precios indicados son finales. No se aplica IVA según el artículo 94 de la Ley del IVA eslovena.</span>
       </p>
       <p class="footer-credit">
-        <span class="t-si">Del KLAJANI Group</span><span class="t-en">Part of KLAJANI Group</span>
-        <span class="t-de">Teil der KLAJANI Group</span><span class="t-es">Parte de KLAJANI Group</span>
+        <a href="https://klajani.com" target="_blank" rel="noopener">
+          <span class="t-si">Del KLAJANI Group</span><span class="t-en">Part of KLAJANI Group</span>
+          <span class="t-de">Teil der KLAJANI Group</span><span class="t-es">Parte de KLAJANI Group</span>
+        </a>
       </p>
     </div>
     <div class="footer-links">
@@ -2306,6 +2435,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <span class="t-de">Alle Produkte werden individuell nach Ihrer Bestellung gefertigt.</span>
       <span class="t-es">Todos los productos se fabrican a medida según su pedido.</span>
     </p>
+    <p class="footer-copyright">© 2026 premiumcards.si</p>
   </div>
 </footer>
 
