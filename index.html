@@ -1237,12 +1237,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </div>
 
         <div class="hero-slots">
-          <div class="hero-slots-bar"><span style="width: 72%;"></span></div>
+          <div class="hero-slots-bar"><span style="width: 80%;"></span></div>
           <p class="hero-slots-text">
-            <span class="t-si">18 od 25 prostih mest za ta teden — mesto je rezervirano ob plačilu.</span>
-            <span class="t-en">18 of 25 slots open this week — your slot is secured upon payment.</span>
-            <span class="t-de">18 von 25 Plätzen diese Woche frei — Ihr Platz ist mit der Zahlung gesichert.</span>
-            <span class="t-es">18 de 25 plazas disponibles esta semana — su plaza queda asegurada con el pago.</span>
+            <span class="t-si">5 od 25 mest zapolnjenih ta mesec — mesto je rezervirano ob plačilu.</span>
+            <span class="t-en">5 of 25 slots filled this month — your slot is secured upon payment.</span>
+            <span class="t-de">5 von 25 Plätzen diesen Monat belegt — Ihr Platz ist mit der Zahlung gesichert.</span>
+            <span class="t-es">5 de 25 plazas ocupadas este mes — su plaza queda asegurada con el pago.</span>
           </p>
         </div>
       </div>
@@ -2407,9 +2407,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <div>
       <a href="#top" class="wordmark small">premium<em>cards</em><span class="tld">.si</span></a>
       <span class="footer-tagline">BE REMEMBERED.</span>
-      <p class="footer-legal" id="sellerLegalBlock">
-        <!-- populated by JS from SELLER_CONFIG so it stays in one place -->
-      </p>
       <p class="footer-vat-note">
         <span class="t-si">Vse navedene cene so končne. DDV ni obračunan v skladu s 94. členom ZDDV-1.</span>
         <span class="t-en">All listed prices are final. VAT is not charged under Article 94 of the Slovenian VAT Act.</span>
@@ -2486,14 +2483,6 @@ const pcSupabase = (SUPABASE_URL.includes('YOUR-PROJECT') || !window.supabase)
 // 1) SI/EN language toggle  2) product configurator  3) FAQ accordion  4) order form
 
 document.addEventListener('DOMContentLoaded', () => {
-
-  /* ---------- 0. seller/legal footer block, from SELLER_CONFIG ---------- */
-  const sellerBlock = document.getElementById('sellerLegalBlock');
-  if (sellerBlock && typeof SELLER_CONFIG !== 'undefined') {
-    sellerBlock.innerHTML =
-      `${SELLER_CONFIG.SELLER_NAME}<br>${SELLER_CONFIG.SELLER_ADDRESS}<br>` +
-      `<span class="t-si">Davčna št.</span><span class="t-en">Tax ID</span><span class="t-de">Steuernr.</span><span class="t-es">NIF</span>: ${SELLER_CONFIG.SELLER_TAX_ID}`;
-  }
 
   /* ---------- 0b. VAT_MODE — applied consistently to EVERY static price
      on the page (hero + all four service-option breakdowns), not just
