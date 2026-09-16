@@ -1311,10 +1311,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <figure class="hero-product-shot">
           <span class="hero-shot-frame">
             <img
-              src="assets/hero-cards-croco-uv-v3.png"
+              src="assets/hero-cards-croco-uv-v4.webp"
               alt=""
-              width="1536"
-              height="1024"
+              width="1200"
+              height="800"
               decoding="async"
               fetchpriority="high"
             >
@@ -3302,7 +3302,39 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
       } catch (err) {
         console.error('Order submission failed:', err);
-        note.textContent = pick(errorMsg);
+        const fallbackSubject = `PremiumCards povpraševanje — ${form.company.value.trim() || name}`;
+        const fallbackBody = [
+          'Pozdravljeni,',
+          '',
+          'pošiljam podatke za povpraševanje PremiumCards:',
+          '',
+          `Ime: ${name}`,
+          `Podjetje: ${form.company.value.trim()}`,
+          `E-pošta: ${email}`,
+          `Telefon: ${form.phone.value.trim()}`,
+          `ID za DDV: ${form.vatId.value.trim()}`,
+          `Naslov za račun: ${form.billingAddress.value.trim()}, ${form.billingPostcode.value.trim()} ${form.billingCity.value.trim()}, ${form.billingCountry.value.trim()}`,
+          `Vrsta naročila: ${configState.isFirst ? 'prvo naročilo' : 'nespremenjeno ponovno naročilo'}`,
+          `Oblikovanje: ${DESIGN_LABELS[configState.designValue]?.si || configState.designValue}`,
+          `Število oseb: ${configState.people}`,
+          `Skupaj pred dostavo: ${configState.total} €`,
+          `Sporočilo: ${form.message.value.trim()}`,
+          '',
+          'Datoteke bom dodal/a kot prilogo k temu sporočilu.'
+        ].join('\n');
+
+        note.textContent = pick(errorMsg) + ' ';
+        const fallbackLink = document.createElement('a');
+        fallbackLink.href = `mailto:order@premiumcards.si?subject=${encodeURIComponent(fallbackSubject)}&body=${encodeURIComponent(fallbackBody)}`;
+        fallbackLink.textContent = pick({
+          si: 'Pošljite podatke po e-pošti.',
+          en: 'Send your details by email.',
+          de: 'Senden Sie Ihre Angaben per E-Mail.',
+          es: 'Envíe sus datos por correo electrónico.'
+        });
+        fallbackLink.style.color = 'inherit';
+        fallbackLink.style.textDecoration = 'underline';
+        note.appendChild(fallbackLink);
       } finally {
         submitOrderBtn.disabled = false;
       }
