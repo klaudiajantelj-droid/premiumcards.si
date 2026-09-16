@@ -3323,12 +3323,7 @@ document.addEventListener('DOMContentLoaded', () => {
           'Datoteke bom dodal/a kot prilogo k temu sporočilu.'
         ].join('\n');
 
-        note.textContent = pick({
-          si: 'Vaše povpraševanje smo pripravili v e-poštnem sporočilu. Prosimo, pošljite odprto sporočilo. Če ste izbrali datoteke, jih dodajte kot prilogo.',
-          en: 'We prepared your request as an email. Please send the opened message. If you selected files, add them as attachments.',
-          de: 'Wir haben Ihre Anfrage als E-Mail vorbereitet. Bitte senden Sie die geöffnete Nachricht. Falls Sie Dateien ausgewählt haben, fügen Sie diese als Anhang hinzu.',
-          es: 'Hemos preparado su solicitud como correo electrónico. Envíe el mensaje abierto. Si seleccionó archivos, añádalos como adjuntos.'
-        }) + ' ';
+        note.textContent = pick(errorMsg) + ' ';
         const fallbackLink = document.createElement('a');
         fallbackLink.href = `mailto:order@premiumcards.si?subject=${encodeURIComponent(fallbackSubject)}&body=${encodeURIComponent(fallbackBody)}`;
         fallbackLink.textContent = pick({
@@ -3340,7 +3335,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fallbackLink.style.color = 'inherit';
         fallbackLink.style.textDecoration = 'underline';
         note.appendChild(fallbackLink);
-        window.location.href = fallbackLink.href;
       } finally {
         submitOrderBtn.disabled = false;
       }
