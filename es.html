@@ -2508,7 +2508,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   </a>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 // ============================================================
 // SELLER / TAX CONFIG — single source of truth for legal display.
@@ -2526,17 +2525,12 @@ const SELLER_CONFIG = {
 </script>
 <script>
 // ============================================================
-// premiumcards.si — Supabase config
-// Paste your project's URL + anon (public) key here after running
-// supabase-setup.sql. Find both under: Project → Settings → API.
-// The anon key is safe to expose in client-side code — it can only
-// do what the RLS policies in supabase-setup.sql allow.
+// premiumcards.si — order endpoint (Google Apps Script web app)
+// Orders are emailed to order@premiumcards.si and uploaded files
+// are saved to a Google Drive folder. No database.
 // ============================================================
-const SUPABASE_URL = 'https://gtmdfhexoojiwzqznxds.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_Pk2zUVLzaryNWtx1hkTDPA_HPUAzhf3';
-const pcSupabase = (SUPABASE_URL.includes('YOUR-PROJECT') || !window.supabase)
-  ? null
-  : window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const ORDER_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxR_K6pWjvBfKv5JnVW56l-WfVmAhYdqZDGBASSUb6RIw0FddlML0izbrU6_OSHKH1Zbw/exec';
+const pcOrderReady = !ORDER_ENDPOINT.includes('APPS_SCRIPT_URL_HERE');
 </script>
 <script>
 // premiumcards.si — funnel interactions
@@ -3175,22 +3169,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const pageLoadTime = Date.now();
 
   if (form && submitOrderBtn) {
-    if (!pcSupabase) {
+    if (!pcOrderReady) {
       // Dev/production-mode guard: never fake a working form.
       submitOrderBtn.disabled = true;
       if (devModeNote) {
         devModeNote.textContent = pick({
-          si: 'Razvojni način: backend (Supabase) še ni nastavljen. Obrazec trenutno ne pošilja naročil — glejte README.md.',
-          en: 'Development mode: backend (Supabase) is not configured yet. This form cannot submit orders yet — see README.md.',
-          de: 'Entwicklungsmodus: Backend (Supabase) ist noch nicht konfiguriert. Dieses Formular kann noch keine Bestellungen senden — siehe README.md.',
-          es: 'Modo de desarrollo: el backend (Supabase) aún no está configurado. Este formulario todavía no puede enviar pedidos — consulte README.md.'
+          si: 'Razvojni način: backend še ni nastavljen. Obrazec trenutno ne pošilja naročil — glejte README.md.',
+          en: 'Development mode: backend is not configured yet. This form cannot submit orders yet — see README.md.',
+          de: 'Entwicklungsmodus: Backend ist noch nicht konfiguriert. Dieses Formular kann noch keine Bestellungen senden — siehe README.md.',
+          es: 'Modo de desarrollo: el backend aún no está configurado. Este formulario todavía no puede enviar pedidos — consulte README.md.'
         });
       }
     }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!pcSupabase) return; // guarded above; submit button is disabled in this state anyway
+      if (!pcOrderReady) return; // guarded above; submit button is disabled in this state anyway
 
       note.textContent = '';
       if (!validateForm()) {
@@ -3258,8 +3252,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const requestId = (crypto.randomUUID && crypto.randomUUID()) ||
           `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-        const { data, error } = await pcSupabase.functions.invoke('submit-order', {
-          body: {
+        const res = await fetch(ORDER_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
             requestId,
             honeypot: hp ? hp.value : '',
             msSincePageLoad,
@@ -3288,10 +3284,10 @@ document.addEventListener('DOMContentLoaded', () => {
             briefStyle: form.briefStyle ? form.briefStyle.value.trim() : '',
             clientTotal: configState.total, // display-only; the Edge Function recomputes and never trusts this
             files
-          }
+          })
         });
-        if (error) throw error;
-        if (data && data.error) throw new Error(data.error);
+        const data = await res.json().catch(() => null);
+        if (!res.ok || !data || !data.ok) throw new Error((data && data.error) || `HTTP ${res.status}`);
 
         note.textContent = pick({
           si: 'Hvala. Prejeli smo vaše povpraševanje. Po pregledu podatkov vam pošljemo predračun, strošek dostave in predvideni rok.',
