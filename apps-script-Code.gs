@@ -11,8 +11,12 @@ function doPost(e) {
     const d = JSON.parse(e.postData.contents);
 
     // spam guards (same fields the website already sends)
-    if (d.honeypot) return json_({ ok: true });
-    if (typeof d.msSincePageLoad === 'number' && d.msSincePageLoad < 3000) return json_({ ok: true });
+    // never drop silently: suspicious submissions are still emailed, flagged in the subject
+    // (mobile autofill can fill the hidden honeypot field)
+    const spamFlags = [];
+    if (d.honeypot) spamFlags.push('honeypot');
+    if (typeof d.msSincePageLoad === 'number' && d.msSincePageLoad < 3000) spamFlags.push('too fast');
+    if (spamFlags.length) console.warn('spam flags: ' + spamFlags.join(', '));
     if (!d.name || !d.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) return json_({ ok: false, error: 'missing fields' });
 
     // duplicate submissions (double click / retry)
@@ -70,7 +74,7 @@ function doPost(e) {
       to: ORDER_TO,
       replyTo: d.email,
       name: 'premiumcards.si',
-      subject: `Povpraševanje: ${clean_(d.company || d.name)} (${d.people || 1} os.)`,
+      subject: `${spamFlags.length ? '[SPAM?] ' : ''}Povpraševanje: ${clean_(d.company || d.name)} (${d.people || 1} os.)`,
       htmlBody: html,
       attachments: blobs
     });
